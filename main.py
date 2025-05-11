@@ -204,7 +204,7 @@ if __name__ == '__main__':
 
     x_dane: np.ndarray = [0, 1, -1, 2, -2, 3, -3]  # type: ignore
     y_dane: np.ndarray = [0, 1, 1, 4, 4, -9, -9]  # type: ignore
-    stopien: int = 5  # Stopień wielomianu
+    stopien: int = 2  # Stopień wielomianu
 
     print(
         f"\nWywołanie MNK dla danych: x={x_dane}, y={y_dane}, stopień={stopien}")
