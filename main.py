@@ -1,8 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# --- Numerical Functions ---
-
 
 class NumericalError(Exception):
     """Custom exception for numerical errors in this module."""
@@ -49,7 +47,7 @@ def cholesky_decomposition(A: np.ndarray) -> np.ndarray:
                         f"Macierz nie jest dodatnio określona (element diagonalny L[{i},{i}]^2 = {diag_val:.2e} <= 0).")
                 L[i, j] = np.sqrt(diag_val)
             else:
-                # Check for division by zero (should not happen if positive-definite check is robust)
+                # Check for division by zero
                 if L[j, j] < 1e-10:
                     raise NumericalError(
                         f"Dzielenie przez bliską zeru wartość L[{j},{j}] podczas rozkładu Cholesky'ego.")
@@ -79,7 +77,7 @@ def solve_forward_substitution(L: np.ndarray, b: np.ndarray) -> np.ndarray:
         # Check for division by zero
         if abs(L[i, i]) < 1e-10:
             raise NumericalError(
-                f"Dzielenie przez bliską zeru wartość L[{i},{i}] podczas forward substitution.")
+                f"Dzielenie przez wartość bliską zeru L[{i},{i}] podczas forward substitution.")
         sum_j = np.dot(L[i, :i], z[:i])  # L[i,j] * z[j] for j in 0..i-1
         z[i] = (b[i] - sum_j) / L[i, i]
     return z
@@ -107,7 +105,7 @@ def solve_backward_substitution(U: np.ndarray, z: np.ndarray) -> np.ndarray:
         # Check for division by zero
         if abs(U[i, i]) < 1e-10:
             raise NumericalError(
-                f"Dzielenie przez bliską zeru wartość U[{i},{i}] podczas backward substitution.")
+                f"Dzielenie przez wartość bliską zeru U[{i},{i}] podczas backward substitution.")
         sum_j = np.dot(U[i, i+1:], a[i+1:])  # U[i,j] * a[j] for j in i+1..n-1
         a[i] = (z[i] - sum_j) / U[i, i]
     return a
@@ -122,6 +120,9 @@ def plot_approximation(x_data: np.ndarray, y_data: np.ndarray, coefficients: np.
         y_data (np.array): Y-coordinates of data points.
         coefficients (np.array): Polynomial coefficients [a0, a1, ..., an].
         title (str): Plot title.
+
+    Returns:
+        None
     """
     plt.figure(figsize=(10, 6))
     plt.scatter(x_data, y_data, color='red', label='Dane punkty')
@@ -173,6 +174,7 @@ def Kacprzak_Marek_MNK(x: np.ndarray, y: np.ndarray, n: int, plot=True) -> np.nd
 
         A = np.vander(x, N=n + 1, increasing=True)
 
+        # Multiply A by its transpose
         AtA = A.T @ A
         Aty = A.T @ y
 
